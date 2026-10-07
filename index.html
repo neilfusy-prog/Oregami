@@ -1,0 +1,1366 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXORA E-SPORT</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#080a10;
+  --panel:#11151f;
+  --panel2:#181e2b;
+  --border:#293246;
+  --text:#f5f7ff;
+  --muted:#8e99ae;
+  --purple:#9b6cff;
+  --green:#52e08a;
+  --red:#ff5d68;
+  --blue:#5790ff;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+header{
+  padding:22px;
+  border-bottom:1px solid var(--border);
+  background:#0b0e15;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.header{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+}
+
+.logo span{
+  color:var(--purple);
+}
+
+.status{
+  color:var(--green);
+  font-size:13px;
+}
+
+main{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+}
+
+.game-selector{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.game-btn{
+  min-height:80px;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:var(--panel);
+  color:white;
+  font-size:18px;
+  font-weight:800;
+}
+
+.game-btn.active{
+  border-color:var(--purple);
+  background:#171328;
+}
+
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
+}
+
+.nav{
+  display:flex;
+  gap:8px;
+  overflow:auto;
+  margin-bottom:15px;
+  padding-bottom:4px;
+}
+
+.nav button{
+  white-space:nowrap;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:white;
+  border-radius:10px;
+  padding:11px 15px;
+}
+
+.nav button.active{
+  background:var(--purple);
+  border-color:var(--purple);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+}
+
+.card.full{
+  grid-column:1/-1;
+}
+
+.card h2{
+  margin:0 0 13px;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.search{
+  width:100%;
+  padding:13px;
+  border-radius:11px;
+  border:1px solid var(--border);
+  background:#0c1018;
+  color:white;
+  margin-bottom:12px;
+}
+
+.list{
+  display:grid;
+  gap:8px;
+}
+
+.list-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:11px;
+}
+
+.tag{
+  padding:5px 8px;
+  border-radius:8px;
+  background:#272d3c;
+  font-size:12px;
+}
+
+.tier{
+  display:grid;
+  gap:8px;
+  margin-bottom:15px;
+}
+
+.tier-row{
+  display:grid;
+  grid-template-columns:55px 1fr;
+  min-height:55px;
+  border-radius:10px;
+  overflow:hidden;
+  background:var(--panel2);
+}
+
+.tier-name{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:900;
+}
+
+.tier-s{background:#ffca55;color:#111}
+.tier-a{background:#67d68a;color:#111}
+.tier-b{background:#62a8ff;color:#111}
+.tier-c{background:#a989ff;color:#111}
+
+.tier-content{
+  padding:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.chip{
+  background:#252c3a;
+  padding:7px 10px;
+  border-radius:9px;
+}
+
+.timer{
+  text-align:center;
+  font-size:58px;
+  font-weight:900;
+  margin:15px 0;
+  font-variant-numeric:tabular-nums;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.actions button{
+  flex:1;
+  min-height:45px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--panel2);
+  color:white;
+}
+
+.primary{
+  background:var(--purple)!important;
+  border-color:var(--purple)!important;
+}
+
+canvas{
+  width:100%;
+  display:block;
+  background:
+    linear-gradient(#222938 1px,transparent 1px),
+    linear-gradient(90deg,#222938 1px,transparent 1px),
+    #10141d;
+  background-size:50px 50px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  touch-action:none;
+}
+
+.paint-tools{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:10px;
+}
+
+.paint-tools button,
+.paint-tools select,
+.paint-tools input{
+  min-height:44px;
+  border:1px solid var(--border);
+  background:var(--panel2);
+  color:white;
+  border-radius:9px;
+  padding:8px 10px;
+}
+
+.paint-tools input[type=color]{
+  width:50px;
+  padding:3px;
+}
+
+.paint-tools button.active{
+  background:var(--purple);
+}
+
+.ink-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.ink{
+  padding:12px;
+  background:var(--panel2);
+  border-radius:12px;
+}
+
+.progress{
+  height:18px;
+  background:#090b10;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.progress div{
+  height:100%;
+  transition:.2s;
+}
+
+.red{
+  background:var(--red);
+}
+
+.blue{
+  background:var(--blue);
+}
+
+.range{
+  width:100%;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.big-number{
+  font-size:35px;
+  font-weight:900;
+}
+
+.map-preview{
+  min-height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:14px;
+  background:
+    radial-gradient(circle at 30% 30%,#38435d 0 8%,transparent 9%),
+    radial-gradient(circle at 70% 65%,#38435d 0 10%,transparent 11%),
+    #171d29;
+  color:var(--muted);
+}
+
+@media(max-width:700px){
+  main{padding:12px}
+  .grid{grid-template-columns:1fr}
+  .game-selector{grid-template-columns:1fr}
+  .header{align-items:flex-start}
+  .timer{font-size:45px}
+  .ink-controls{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header">
+<div class="logo">NEXORA <span>E-SPORT</span></div>
+<div class="status">● COMPÉTITION</div>
+</div>
+</header>
+
+<main>
+
+<div class="game-selector">
+<button class="game-btn active" data-game="unite">
+🟣 Pokémon Unite
+<br>
+<small>Stratégie & analyse</small>
+</button>
+
+<button class="game-btn" data-game="splatoon">
+🟢 Splatoon 3
+<br>
+<small>Tactique & peinture</small>
+</button>
+</div>
+
+
+<!-- ========================= -->
+<!-- POKEMON UNITE -->
+<!-- ========================= -->
+
+<section id="unite" class="section active">
+
+<div class="nav">
+<button class="active" data-page="unite-home">Accueil</button>
+<button data-page="unite-pokemon">Pokémon</button>
+<button data-page="unite-tier">Tier list</button>
+<button data-page="unite-builds">Builds</button>
+<button data-page="unite-map">Carte</button>
+</div>
+
+
+<div id="unite-home" class="page">
+
+<div class="grid">
+
+<div class="card">
+<h2>⏱️ Chronomètre</h2>
+<div class="timer" id="uniteTimer">00:00</div>
+
+<div class="actions">
+<button class="primary" id="uniteStart">▶ Démarrer</button>
+<button id="uniteReset">↺ Reset</button>
+</div>
+</div>
+
+<div class="card">
+<h2>👑 Objectifs</h2>
+
+<div class="list">
+<div class="list-item">
+<span>Rayquaza</span>
+<strong>10:00</strong>
+</div>
+
+<div class="list-item">
+<span>Regieleki</span>
+<strong>08:00</strong>
+</div>
+
+<div class="list-item">
+<span>Regice / Regirock / Registeel</span>
+<strong>07:00</strong>
+</div>
+</div>
+</div>
+
+<div class="card full">
+<h2>🐾 Pokémon sauvages</h2>
+
+<div class="list">
+
+<div class="list-item">
+<span>Pokémon sauvages de début de partie</span>
+<span class="tag">Début</span>
+</div>
+
+<div class="list-item">
+<span>Pokémon sauvages de rotation</span>
+<span class="tag">Milieu</span>
+</div>
+
+<div class="list-item">
+<span>Pokémon sauvages spéciaux</span>
+<span class="tag">Objectif</span>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+
+<div id="unite-pokemon" class="page hidden">
+
+<div class="card">
+<h2>🐾 Pokémon</h2>
+
+<input
+class="search"
+id="pokemonSearch"
+placeholder="Rechercher un Pokémon..."
+>
+
+<div class="list" id="pokemonList"></div>
+
+</div>
+</div>
+
+
+<div id="unite-tier" class="page hidden">
+
+<div class="card">
+
+<h2>🏆 Tier list</h2>
+
+<div class="tier">
+<div class="tier-row">
+<div class="tier-name tier-s">S</div>
+<div class="tier-content">
+<span class="chip">Pokémon à définir</span>
+</div>
+</div>
+
+<div class="tier-row">
+<div class="tier-name tier-a">A</div>
+<div class="tier-content">
+<span class="chip">Pokémon à définir</span>
+</div>
+</div>
+
+<div class="tier-row">
+<div class="tier-name tier-b">B</div>
+<div class="tier-content">
+<span class="chip">Pokémon à définir</span>
+</div>
+</div>
+
+<div class="tier-row">
+<div class="tier-name tier-c">C</div>
+<div class="tier-content">
+<span class="chip">Pokémon à définir</span>
+</div>
+</div>
+</div>
+
+<p class="muted">
+La tier list pourra être modifiée selon la méta de votre compétition.
+</p>
+
+</div>
+</div>
+
+
+<div id="unite-builds" class="page hidden">
+
+<div class="card">
+
+<h2>🧩 Builds</h2>
+
+<div class="list">
+
+<div class="list-item">
+<div>
+<strong>Pikachu</strong>
+<br>
+<small class="muted">Build offensif</small>
+</div>
+<span class="tag">À configurer</span>
+</div>
+
+<div class="list-item">
+<div>
+<strong>Mewtwo</strong>
+<br>
+<small class="muted">Build compétition</small>
+</div>
+<span class="tag">À configurer</span>
+</div>
+
+<div class="list-item">
+<div>
+<strong>Votre Pokémon</strong>
+<br>
+<small class="muted">Créer un build</small>
+</div>
+<span class="tag">+</span>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="unite-map" class="page hidden">
+
+<div class="card">
+
+<h2>🗺️ Carte tactique Pokémon Unite</h2>
+
+<div class="paint-tools">
+
+<button class="active" id="uPen">✏️ Stylo</button>
+<button id="uEraser">🧽 Gomme</button>
+
+<input type="color" id="uColor" value="#9b6cff">
+
+<select id="uSize">
+<option value="3">Fin</option>
+<option value="7" selected>Moyen</option>
+<option value="14">Épais</option>
+</select>
+
+<button id="uClear">🗑️ Effacer</button>
+
+</div>
+
+<canvas id="uCanvas" width="1200" height="700"></canvas>
+
+<p class="muted">
+Dessine les rotations, déplacements, zones et stratégies directement sur la carte.
+</p>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- ========================= -->
+<!-- SPLATOON -->
+<!-- ========================= -->
+
+<section id="splatoon" class="section">
+
+<div class="nav">
+<button class="active" data-page="splatoon-home">Accueil</button>
+<button data-page="splatoon-maps">Maps</button>
+<button data-page="splatoon-weapons">Armes</button>
+<button data-page="splatoon-modes">Modes</button>
+<button data-page="splatoon-tactical">Tactique</button>
+</div>
+
+
+<div id="splatoon-home" class="page">
+
+<div class="grid">
+
+<div class="card">
+
+<h2>🎮 Mode de jeu</h2>
+
+<select id="modeSelect" style="width:100%;padding:12px;border-radius:10px;background:#181e2b;color:white;border:1px solid #293246">
+
+<option>Guerre de territoire</option>
+<option>Zones de contrôle</option>
+<option>Rainmaker</option>
+<option>Défense de zone</option>
+
+</select>
+
+</div>
+
+<div class="card">
+
+<h2>🔫 Arme</h2>
+
+<select id="weaponSelect" style="width:100%;padding:12px;border-radius:10px;background:#181e2b;color:white;border:1px solid #293246">
+
+<option>Liquidateur</option>
+<option>Rouleau</option>
+<option>Badigeonneur</option>
+<option>Sniper</option>
+
+</select>
+
+</div>
+
+<div class="card full">
+
+<h2>🖌️ Avancée de l'encre</h2>
+
+<div class="ink-controls">
+
+<div class="ink">
+
+<div>
+<strong>🔴 Équipe rouge</strong>
+<span id="redValue">50%</span>
+</div>
+
+<input class="range" id="redRange" type="range" min="0" max="100" value="50">
+
+<div class="progress">
+<div class="red" id="redBar" style="width:50%"></div>
+</div>
+
+</div>
+
+
+<div class="ink">
+
+<div>
+<strong>🔵 Équipe bleue</strong>
+<span id="blueValue">50%</span>
+</div>
+
+<input class="range" id="blueRange" type="range" min="0" max="100" value="50">
+
+<div class="progress">
+<div class="blue" id="blueBar" style="width:50%"></div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="splatoon-maps" class="page hidden">
+
+<div class="card">
+
+<h2>🗺️ Maps</h2>
+
+<input
+class="search"
+placeholder="Rechercher une map..."
+id="mapSearch"
+>
+
+<div class="list" id="mapList"></div>
+
+</div>
+
+</div>
+
+
+<div id="splatoon-weapons" class="page hidden">
+
+<div class="card">
+
+<h2>🔫 Armes</h2>
+
+<input
+class="search"
+placeholder="Rechercher une arme..."
+id="weaponSearch"
+>
+
+<div class="list" id="weaponList"></div>
+
+</div>
+
+</div>
+
+
+<div id="splatoon-modes" class="page hidden">
+
+<div class="card">
+
+<h2>🎮 Modes</h2>
+
+<div class="list">
+
+<div class="list-item">
+<strong>🟢 Guerre de territoire</strong>
+<span class="tag">4v4</span>
+</div>
+
+<div class="list-item">
+<strong>🟠 Zones de contrôle</strong>
+<span class="tag">4v4</span>
+</div>
+
+<div class="list-item">
+<strong>🟡 Rainmaker</strong>
+<span class="tag">4v4</span>
+</div>
+
+<div class="list-item">
+<strong>🔵 Défense de zone</strong>
+<span class="tag">4v4</span>
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="splatoon-tactical" class="page hidden">
+
+<div class="card">
+
+<h2>🖌️ Carte tactique Splatoon 3</h2>
+
+<div class="paint-tools">
+
+<button class="active" id="sPaint">🖌️ Peinture</button>
+
+<button id="sDraw">✏️ Dessin</button>
+
+<button id="sErase">🧽 Gomme</button>
+
+<select id="teamColor">
+
+<option value="red">🔴 Équipe rouge</option>
+<option value="blue">🔵 Équipe bleue</option>
+
+</select>
+
+<input type="color" id="sColor" value="#ff5d68">
+
+<select id="sSize">
+
+<option value="12">Petit</option>
+<option value="30" selected>Moyen</option>
+<option value="60">Grand</option>
+
+</select>
+
+<button id="sClear">🗑️ Effacer</button>
+
+</div>
+
+<canvas id="sCanvas" width="1200" height="700"></canvas>
+
+<p class="muted">
+Mode peinture : représente l'avancée de l'encre des deux équipes.
+Mode dessin : ajoute tes flèches et stratégies.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<script>
+
+/* =========================
+   NAVIGATION JEUX
+========================= */
+
+const gameButtons=document.querySelectorAll(".game-btn");
+
+gameButtons.forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+gameButtons.forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+document.querySelectorAll(".section").forEach(s=>{
+s.classList.remove("active");
+});
+
+document
+.getElementById(button.dataset.game)
+.classList.add("active");
+
+});
+
+});
+
+
+/* =========================
+   NAVIGATION MENUS
+========================= */
+
+document.querySelectorAll(".nav").forEach(nav=>{
+
+nav.querySelectorAll("button").forEach(button=>{
+
+button.addEventListener("click",()=>{
+
+nav.querySelectorAll("button")
+.forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+const section=button.closest(".section");
+
+section.querySelectorAll(".page")
+.forEach(page=>page.classList.add("hidden"));
+
+section
+.querySelector("#"+button.dataset.page)
+.classList.remove("hidden");
+
+});
+
+});
+
+});
+
+
+/* =========================
+   CHRONOMETRE UNITE
+========================= */
+
+let uniteSeconds=0;
+let uniteRunning=false;
+let uniteInterval=null;
+
+const uniteTimer=document.getElementById("uniteTimer");
+
+function formatTime(seconds){
+
+const m=Math.floor(seconds/60)
+.toString()
+.padStart(2,"0");
+
+const s=(seconds%60)
+.toString()
+.padStart(2,"0");
+
+return m+":"+s;
+
+}
+
+document
+.getElementById("uniteStart")
+.addEventListener("click",function(){
+
+if(uniteRunning){
+
+uniteRunning=false;
+clearInterval(uniteInterval);
+this.textContent="▶ Reprendre";
+
+}else{
+
+uniteRunning=true;
+this.textContent="⏸ Pause";
+
+uniteInterval=setInterval(()=>{
+
+uniteSeconds++;
+
+uniteTimer.textContent=
+formatTime(uniteSeconds);
+
+},1000);
+
+}
+
+});
+
+
+document
+.getElementById("uniteReset")
+.addEventListener("click",()=>{
+
+uniteRunning=false;
+
+clearInterval(uniteInterval);
+
+uniteSeconds=0;
+
+uniteTimer.textContent="00:00";
+
+document.getElementById("uniteStart")
+.textContent="▶ Démarrer";
+
+});
+
+
+/* =========================
+   DONNEES
+========================= */
+
+const pokemonData=[
+"Pikachu",
+"Dracaufeu",
+"Florizarre",
+"Carapuce",
+"Mew",
+"Mewtwo",
+"Lucario",
+"Greninja",
+"Gardevoir",
+"Absol",
+"Évoli",
+"Feunard d'Alola"
+];
+
+const mapsData=[
+"Map principale",
+"Arène compétitive",
+"Map événementielle"
+];
+
+const weaponsData=[
+"Liquidateur",
+"Liquidateur Pro",
+"Rouleau",
+"Badigeonneur",
+"Double encreur",
+"Éclablaster",
+"Sniper",
+"Arrosoir",
+"Éclatana"
+];
+
+
+/* =========================
+   LISTES + RECHERCHE
+========================= */
+
+function renderList(data,container){
+
+container.innerHTML="";
+
+data.forEach(item=>{
+
+const div=document.createElement("div");
+
+div.className="list-item";
+
+div.innerHTML=`
+<strong>${item}</strong>
+<span class="tag">Voir</span>
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+renderList(
+pokemonData,
+document.getElementById("pokemonList")
+);
+
+renderList(
+mapsData,
+document.getElementById("mapList")
+);
+
+renderList(
+weaponsData,
+document.getElementById("weaponList")
+);
+
+
+function searchList(input, data, container){
+
+input.addEventListener("input",()=>{
+
+const query=input.value.toLowerCase();
+
+const filtered=data.filter(item=>
+item.toLowerCase().includes(query)
+);
+
+renderList(filtered,container);
+
+});
+
+}
+
+searchList(
+document.getElementById("pokemonSearch"),
+pokemonData,
+document.getElementById("pokemonList")
+);
+
+searchList(
+document.getElementById("mapSearch"),
+mapsData,
+document.getElementById("mapList")
+);
+
+searchList(
+document.getElementById("weaponSearch"),
+weaponsData,
+document.getElementById("weaponList")
+);
+
+
+/* =========================
+   PEINTURE GENERIQUE
+========================= */
+
+function createPainter(canvas,options){
+
+const ctx=canvas.getContext("2d");
+
+let drawing=false;
+let erasing=false;
+
+function position(event){
+
+const rect=canvas.getBoundingClientRect();
+
+return{
+
+x:(event.clientX-rect.left)
+*canvas.width/rect.width,
+
+y:(event.clientY-rect.top)
+*canvas.height/rect.height
+
+};
+
+}
+
+canvas.addEventListener("pointerdown",event=>{
+
+drawing=true;
+
+canvas.setPointerCapture(event.pointerId);
+
+const p=position(event);
+
+ctx.beginPath();
+
+ctx.moveTo(p.x,p.y);
+
+});
+
+
+canvas.addEventListener("pointermove",event=>{
+
+if(!drawing)return;
+
+const p=position(event);
+
+ctx.lineCap="round";
+ctx.lineJoin="round";
+
+ctx.lineWidth=options.size();
+
+ctx.globalCompositeOperation=
+erasing
+?"destination-out"
+:"source-over";
+
+ctx.strokeStyle=
+options.color();
+
+ctx.lineTo(p.x,p.y);
+
+ctx.stroke();
+
+});
+
+
+function end(){
+
+drawing=false;
+
+ctx.closePath();
+
+ctx.globalCompositeOperation="source-over";
+
+}
+
+canvas.addEventListener("pointerup",end);
+canvas.addEventListener("pointercancel",end);
+
+return{
+
+erase(value){
+
+erasing=value;
+
+},
+
+clear(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+}
+
+};
+
+}
+
+
+/* =========================
+   UNITE PEINTURE
+========================= */
+
+const unitePainter=createPainter(
+
+document.getElementById("uCanvas"),
+
+{
+
+size:()=>Number(
+document.getElementById("uSize").value
+),
+
+color:()=>document
+.getElementById("uColor").value
+
+}
+
+);
+
+document.getElementById("uPen")
+.onclick=()=>{
+
+unitePainter.erase(false);
+
+document.getElementById("uPen")
+.classList.add("active");
+
+document.getElementById("uEraser")
+.classList.remove("active");
+
+};
+
+document.getElementById("uEraser")
+.onclick=()=>{
+
+unitePainter.erase(true);
+
+document.getElementById("uEraser")
+.classList.add("active");
+
+document.getElementById("uPen")
+.classList.remove("active");
+
+};
+
+document.getElementById("uClear")
+.onclick=()=>unitePainter.clear();
+
+
+/* =========================
+   SPLATOON PEINTURE
+========================= */
+
+const sCanvas=document.getElementById("sCanvas");
+
+let splatoonMode="paint";
+
+const splatoonPainter=createPainter(
+
+sCanvas,
+
+{
+
+size:()=>{
+
+if(splatoonMode==="paint")
+return Number(
+document.getElementById("sSize").value
+);
+
+return 7;
+
+},
+
+color:()=>{
+
+if(splatoonMode==="paint"){
+
+return document.getElementById("teamColor").value==="red"
+
+?"rgba(255,93,104,.45)"
+
+:"rgba(87,144,255,.45)";
+
+}
+
+return document.getElementById("sColor").value;
+
+}
+
+}
+
+);
+
+
+document.getElementById("sPaint")
+.onclick=()=>{
+
+splatoonMode="paint";
+
+splatoonPainter.erase(false);
+
+document
+.querySelectorAll("#splatoon-tactical .paint-tools button")
+.forEach(b=>b.classList.remove("active"));
+
+document.getElementById("sPaint")
+.classList.add("active");
+
+};
+
+
+document.getElementById("sDraw")
+.onclick=()=>{
+
+splatoonMode="draw";
+
+splatoonPainter.erase(false);
+
+document
+.querySelectorAll("#splatoon-tactical .paint-tools button")
+.forEach(b=>b.classList.remove("active"));
+
+document.getElementById("sDraw")
+.classList.add("active");
+
+};
+
+
+document.getElementById("sErase")
+.onclick=()=>{
+
+splatoonMode="erase";
+
+splatoonPainter.erase(true);
+
+document
+.querySelectorAll("#splatoon-tactical .paint-tools button")
+.forEach(b=>b.classList.remove("active"));
+
+document.getElementById("sErase")
+.classList.add("active");
+
+};
+
+
+document.getElementById("sClear")
+.onclick=()=>{
+
+splatoonPainter.clear();
+
+};
+
+
+/* =========================
+   AVANCEE ENCRE
+========================= */
+
+const redRange=document.getElementById("redRange");
+const blueRange=document.getElementById("blueRange");
+
+redRange.addEventListener("input",()=>{
+
+const value=Number(redRange.value);
+
+document.getElementById("redValue")
+.textContent=value+"%";
+
+document.getElementById("redBar")
+.style.width=value+"%";
+
+});
+
+
+blueRange.addEventListener("input",()=>{
+
+const value=Number(blueRange.value);
+
+document.getElementById("blueValue")
+.textContent=value+"%";
+
+document.getElementById("blueBar")
+.style.width=value+"%";
+
+});
+
+</script>
+
+</body>
+</html>
+```
